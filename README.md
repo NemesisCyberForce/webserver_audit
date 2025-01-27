@@ -113,3 +113,6 @@ This enhanced tool provides crucial checks for modern AI applications, focusing 
 - Third-party dependency auditing
 
 Remember to regularly update your wordlists and vulnerability patterns to keep pace with emerging AI-specific security challenges.
+
+## Credits 
+[Mr.Chess](https://github.com/volkansah)
