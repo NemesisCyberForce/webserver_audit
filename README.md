@@ -17,12 +17,12 @@ pip install requests colorama
 Run
 
 ```
-python webserver_audit.py http://example.com
+python scanner.py  http://example.com
 ```
 
 Run full assessment (including port scan and SSL check):
 ```bash
-python webserver_audit.py https://example.com --full
+python scanner.py  https://example.com --full
 ```
 
 
