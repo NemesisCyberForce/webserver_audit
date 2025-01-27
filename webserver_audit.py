@@ -5,6 +5,10 @@ import socket
 import ssl
 from urllib.parse import urlparse
 from colorama import Fore, init
+import time
+from bs4 import BeautifulSoup
+
+init(autoreset=True)
 
 # Initialize colorama
 init(autoreset=True)
@@ -163,6 +167,142 @@ def main():
         directory_traversal_check(args.target)
         xss_check(args.target)
         sql_injection_check(args.target)
+def api_security_checks(url):
+    """Check for common API vulnerabilities"""
+    print_status("\n[ API Security Checks ]", Fore.CYAN)
+    
+    # Test for insecure HTTP methods
+    methods = ['PUT', 'DELETE', 'TRACE', 'PATCH']
+    vulnerable_methods = []
+    
+    for method in methods:
+        try:
+            response = requests.request(method, url, timeout=5)
+            if response.status_code < 400:
+                vulnerable_methods.append(method)
+        except:
+            continue
+    
+    if vulnerable_methods:
+        print_vulnerability(f"Insecure HTTP methods allowed: {', '.join(vulnerable_methods)}")
+    
+    # Test for excessive data exposure
+    test_params = {
+        'fields': '*',
+        'limit': 1000,
+        'scope': 'all'
+    }
+    
+    try:
+        response = requests.get(url, params=test_params, timeout=5)
+        if response.json():  # Simple check for data exposure
+            print_vulnerability("Possible excessive data exposure with parameters")
+    except:
+        pass
+    
+    # Test for missing rate limiting
+    start_time = time.time()
+    for _ in range(10):
+        requests.get(url, timeout=5)
+    if time.time() - start_time < 2:
+        print_vulnerability("Potential missing rate limiting")
+
+def brute_force_directories(url, wordlist="common_dirs.txt"):
+    """Brute-force common directory and file paths"""
+    print_status("\n[ Directory Brute-forcing ]", Fore.CYAN)
+    
+    try:
+        with open(wordlist, 'r') as f:
+            directories = f.read().splitlines()
+    except:
+        directories = [
+            "admin", "backup", "api", "config", "env",
+            ".git", ".env", "wp-config.php", "config.json"
+        ]
+    
+    found = []
+    for dir in directories:
+        test_url = f"{url}/{dir}"
+        try:
+            response = requests.get(test_url, timeout=3)
+            if response.status_code == 200:
+                found.append(test_url)
+                print_status(f"Found: {test_url}", Fore.YELLOW)
+        except:
+            continue
+    
+    if found:
+        print_vulnerability(f"Discovered resources: {', '.join(found)}")
+    else:
+        print_success("No common directories/files found")
+
+def csrf_check(url):
+    """Check for CSRF vulnerabilities"""
+    print_status("\n[ CSRF Vulnerability Check ]", Fore.CYAN)
+    
+    try:
+        response = requests.get(url, timeout=5)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        forms = soup.find_all('form')
+        
+        vulnerable_forms = []
+        for form in forms:
+            inputs = form.find_all('input')
+            has_token = any('csrf' in i.get('name', '').lower() or 'token' in i.get('name', '').lower() for i in inputs)
+            
+            if not has_token:
+                vulnerable_forms.append(form.get('action', 'Unknown'))
+        
+        if vulnerable_forms:
+            print_vulnerability(f"Forms without CSRF tokens: {', '.join(vulnerable_forms)}")
+        
+        # Check CORS misconfiguration
+        headers = {'Origin': 'https://evil.com'}
+        response = requests.get(url, headers=headers, timeout=5)
+        
+        if 'https://evil.com' in response.headers.get('Access-Control-Allow-Origin', ''):
+            print_vulnerability("CORS misconfiguration - arbitrary origin allowed")
+            
+        # Check SameSite cookie attribute
+        cookies = response.cookies
+        for cookie in cookies:
+            if 'SameSite' not in cookie.__dict__:
+                print_vulnerability(f"Cookie {cookie.name} missing SameSite attribute")
+    
+    except Exception as e:
+        print_status(f"CSRF check error: {str(e)}", Fore.YELLOW)
+
+def main():
+    parser = argparse.ArgumentParser(description="Enhanced Web Server Penetration Testing Tool")
+    parser.add_argument("target", help="Target URL (e.g., http://example.com)")
+    parser.add_argument("-p", "--ports", nargs="+", type=int, default=[80, 443, 8080],
+                        help="Ports to scan (default: 80, 443, 8080)")
+    parser.add_argument("-f", "--full", action="store_true",
+                        help="Perform full security assessment")
+    parser.add_argument("-a", "--api", action="store_true",
+                        help="Perform API security checks")
+    parser.add_argument("-b", "--brute", action="store_true",
+                        help="Perform directory brute-forcing")
+    parser.add_argument("-c", "--csrf", action="store_true",
+                        help="Perform CSRF vulnerability checks")
+    parser.add_argument("-w", "--wordlist",
+                        help="Custom wordlist for directory brute-forcing")
+    
+    args = parser.parse_args()
+    
+    if args.full:
+        # Existing full scan logic
+        # Add new checks:
+        api_security_checks(args.target)
+        brute_force_directories(args.target, args.wordlist)
+        csrf_check(args.target)
+    else:
+        if args.api:
+            api_security_checks(args.target)
+        if args.brute:
+            brute_force_directories(args.target, args.wordlist)
+        if args.csrf:
+            csrf_check(args.target)
 
 if __name__ == "__main__":
     main()
