@@ -1,3 +1,4 @@
+# Copyright NemesisCyberForce
 import argparse
 import requests
 import socket
