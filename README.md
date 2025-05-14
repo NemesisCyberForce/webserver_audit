@@ -1,6 +1,11 @@
 # webserver_audit 
 #### Security Scanner for you AI_tools
 
+### Version Note
+
+- Light Version (scanner.py): A simple and fast security scan with basic features such as Directory Traversal, XSS, SQL Injection, and Port Scanning. Ideal for quick tests.
+- Advanced Version (v2.py): Includes additional features like API security checks, directory brute-forcing, CSRF scanning, and much more. This version is optimized for more comprehensive security assessments and modern scenarios.
+
 This tool includes the following features:
 - Directory Traversal Check
 - XSS Vulnerability Check
