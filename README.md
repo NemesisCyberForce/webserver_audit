@@ -69,7 +69,7 @@ python scanner.py https://ai-app.com/api --api --csrf
 
 3. Custom directory brute-forcing:
 ```bash
-python scanner.py https://ai-app.com --brute --wordlist custom_words.txt
+python v2.py https://ai-app.com --brute --wordlist custom_words.txt
 ```
 
 Important Enhancements for AI Applications:
