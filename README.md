@@ -77,17 +77,17 @@ Usage Examples:
 
 1. Full AI API security audit:
 ```bash
-python scanner.py https://ai-app.com/api --full --wordlist api_words.txt
+python file.py https://ai-app.com/api --full --wordlist api_words.txt
 ```
 
 2. Targeted checks:
 ```bash
-python scanner.py https://ai-app.com/api --api --csrf
+python file.py https://ai-app.com/api --api --csrf
 ```
 
 3. Custom directory brute-forcing:
 ```bash
-python v2.py https://ai-app.com --brute --wordlist custom_words.txt
+python file.py https://ai-app.com --brute --wordlist custom_words.txt
 ```
 
 Important Enhancements for AI Applications:
