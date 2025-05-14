@@ -1,5 +1,23 @@
 # webserver_audit 
 #### Security Scanner
+## ⚠️ Before you ask for --explain or --educational mode...
+
+This tool doesn't come with an `--explain` flag, a fancy GUI, or a built-in cybersecurity degree. Why?
+
+Because if you need a tool to *teach* you what an XSS vulnerability is **after you've already run a scanner on a live site**, you're probably not ready to be scanning in the first place.
+
+Don't get us wrong — everyone starts somewhere. But security isn't a game of "click and learn" — it's a responsibility. 
+Automating the explanation of vulnerabilities makes it far too easy for someone to shift from **"oops, I scanned myself"** to **"oops, I scanned someone else."**
+
+So no, this isn't a training tool.  
+It's a **tool for trained people.**
+
+Wanna learn? Great!  
+Open the code, Google the terms, break your own lab. Just don't break the internet.
+
+Love,  
+The Paranoid Dev 😎
+
 
 ### Version Note
 
