@@ -120,5 +120,13 @@ This enhanced tool provides crucial checks for modern AI applications, focusing 
 
 Remember to regularly update your wordlists and vulnerability patterns to keep pace with emerging AI-specific security challenges.
 
+## Warning
+
+This repository contains tools for basic security checks of webservers. **Unauthorized use of these tools is strictly prohibited.** They are intended solely for educational purposes and for use in authorized environments. 
+
+By using these tools, you agree to take full responsibility for ensuring that your activities comply with applicable laws and regulations. Misusing these tools for malicious purposes may result in severe legal consequences.
+
+Always obtain proper authorization before performing any security assessments.
+
 ## Credits 
 [Mr.Chess](https://github.com/volkansah)
