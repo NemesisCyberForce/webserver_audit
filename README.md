@@ -40,12 +40,12 @@ pip install requests colorama
 Run
 
 ```
-python scanner.py  http://example.com
+python file.py  http://example.com
 ```
 
 Run full assessment (including port scan and SSL check):
 ```bash
-python scanner.py  https://example.com --full
+python file.py  https://example.com --full
 ```
 
 
